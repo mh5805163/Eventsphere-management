@@ -3,6 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { Link, useParams } from "react-router-dom";
 import {
   CalendarDays,
+  CalendarPlus,
   MapPin,
   Clock,
   Bookmark,
@@ -14,6 +15,40 @@ import { demoStore, subscribeDemo } from "../services/demoStore";
 import { useAuth } from "../context/DemoAuth";
 import { Badge, Button, Card, Empty, Loading, Modal } from "../components/ui";
 import { dateText } from "../components/EventCard";
+
+function downloadCalendarEvent(event) {
+  const format = (value) =>
+    new Date(value).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
+  const escape = (value = "") =>
+    String(value).replace(/[\\,;\n]/g, (character) =>
+      character === "\\" ? "\\\\" : character === "\n" ? "\\n" : `\\${character}`,
+    );
+  const details = [
+    `DESCRIPTION:${escape(event.description)}`,
+    `LOCATION:${escape(event.location)}`,
+  ].join("\\n");
+  const ics = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//EventSphere//Event Calendar//EN",
+    "BEGIN:VEVENT",
+    `UID:${event._id}@eventsphere`,
+    `DTSTAMP:${format(new Date())}`,
+    `DTSTART:${format(event.date)}`,
+    event.endDate ? `DTEND:${format(event.endDate)}` : "",
+    `SUMMARY:${escape(event.title)}`,
+    details,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].filter(Boolean).join("\\n");
+  const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${event.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "eventsphere-event"}.ics`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export function FloorPlan({
   booths,
   user,
@@ -428,6 +463,15 @@ export default function EventDetails() {
                 <Link to={`/dashboard/${user.role}`}>Go to dashboard</Link>
               </Button>
             )}
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-3 w-full"
+              onClick={() => downloadCalendarEvent(event)}
+            >
+              <CalendarPlus size={15} />
+              Add to calendar
+            </Button>
           </Card>
         </aside>
       </section>
