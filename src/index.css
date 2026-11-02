@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/font-1.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/font-2.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/font-3.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/font-4.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/font-5.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/font-6.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/font-7.ttf) format("truetype");
+}
+@theme {
+  --color-ivory: #fcf8f4;
+  --color-blush: #f6eae5;
+  --color-rose: #bb8e85;
+  --color-rose-dark: #896057;
+  --color-ink: #342d2a;
+  --color-muted: #776d67;
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+}
+@layer base {
+  body {
+    @apply bg-ivory text-ink antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    @apply outline-offset-4;
+  }
+  button:not(:disabled),
+  summary,
+  select {
+    cursor: pointer;
+  }
+  input:not([type="checkbox"]),
+  select,
+  textarea {
+    @apply w-full rounded-lg border border-rose/25 bg-white px-3 py-2.5 text-sm transition focus:border-rose focus:outline-none focus:ring-2 focus:ring-rose/20;
+  }
+  textarea {
+    min-height: 110px;
+  }
+  label {
+    @apply block text-sm font-medium;
+  }
+  label > input,
+  label > select,
+  label > textarea {
+    @apply mt-2;
+  }
+  ::selection {
+    background: #e2c7bd;
+  }
+}
+@layer components {
+  .eyebrow {
+    @apply text-[10px] font-semibold uppercase tracking-[0.25em] text-rose-dark;
+  }
+  .section {
+    @apply mx-auto max-w-7xl px-6 py-20 md:px-12 md:py-24;
+  }
+  .panel {
+    @apply rounded-2xl border border-rose/20 bg-white p-6;
+  }
+  .field-grid {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+}

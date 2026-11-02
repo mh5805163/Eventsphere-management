@@ -1,0 +1,37 @@
+{
+  "name": "eventsphere-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview",
+    "format": "prettier --write src",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.4",
+    "lucide-react": "^0.548.0",
+    "recharts": "^3.3.0",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1",
+    "sonner": "^2.0.7"
+  },
+  "devDependencies": {
+    "vite": "^7.1.12",
+    "@vitejs/plugin-react": "^5.0.4",
+    "tailwindcss": "^4.1.16",
+    "@tailwindcss/vite": "^4.1.16",
+    "prettier": "^3.9.10"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}
