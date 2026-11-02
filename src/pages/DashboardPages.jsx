@@ -299,10 +299,17 @@ export function Events() {
   const [edit, setEdit] = useState(null);
   const [q, setQ] = useState("");
   const [category, setCategory] = useState("");
+  const [status, setStatus] = useState("all");
   const events = data.events.filter(
     (e) =>
       `${e.title} ${e.location}`.toLowerCase().includes(q.toLowerCase()) &&
-      (!category || e.category === category),
+      (!category || e.category === category) &&
+      (status === "all" ||
+        (status === "upcoming"
+          ? new Date(e.endDate || e.date) >= new Date()
+          : status === "available"
+            ? e.registrationCount < e.capacity
+            : new Date(e.endDate || e.date) < new Date())),
   );
   async function save(e) {
     e.preventDefault();
@@ -351,6 +358,17 @@ export function Events() {
           {[...new Set(data.events.map((e) => e.category))].map((c) => (
             <option key={c}>{c}</option>
           ))}
+        </select>
+        <select
+          aria-label="Event status filter"
+          className="sm:max-w-48"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="all">All statuses</option>
+          <option value="upcoming">Upcoming</option>
+          <option value="available">Open spots</option>
+          <option value="ended">Ended</option>
         </select>
       </div>
       {user.role === "admin" ? (

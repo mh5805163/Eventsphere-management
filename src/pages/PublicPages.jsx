@@ -21,6 +21,8 @@ export function EventList({ type }) {
   const [params] = useSearchParams();
   const [q, setQ] = useState("");
   const [category, setCategory] = useState(params.get("category") || "");
+  const [availability, setAvailability] = useState("upcoming");
+  const [sort, setSort] = useState("date");
   const [events, setEvents] = useState(null);
   const [error, setError] = useState("");
   useEffect(() => {
@@ -29,13 +31,23 @@ export function EventList({ type }) {
       .then(setEvents)
       .catch((e) => setError(e.message));
   }, [type]);
-  const filtered = events?.filter(
-    (e) =>
-      (!category || e.category === category) &&
-      `${e.title} ${e.location} ${e.description}`
-        .toLowerCase()
-        .includes(q.toLowerCase()),
-  );
+  const filtered = events
+    ?.filter(
+      (e) =>
+        (!category || e.category === category) &&
+        (availability === "all" ||
+          (availability === "available"
+            ? e.registrationCount < e.capacity
+            : new Date(e.endDate || e.date) >= new Date())) &&
+        `${e.title} ${e.location} ${e.description}`
+          .toLowerCase()
+          .includes(q.toLowerCase()),
+    )
+    .sort((a, b) =>
+      sort === "name"
+        ? a.title.localeCompare(b.title)
+        : new Date(a.date) - new Date(b.date),
+    );
   return (
     <>
       <PageHeading
@@ -75,6 +87,25 @@ export function EventList({ type }) {
             ].map((c) => (
               <option key={c}>{c}</option>
             ))}
+          </select>
+          <select
+            className="sm:max-w-52"
+            aria-label="Filter availability"
+            value={availability}
+            onChange={(e) => setAvailability(e.target.value)}
+          >
+            <option value="upcoming">Upcoming</option>
+            <option value="available">Open spots</option>
+            <option value="all">All dates</option>
+          </select>
+          <select
+            className="sm:max-w-48"
+            aria-label="Sort events"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+          >
+            <option value="date">Soonest first</option>
+            <option value="name">Name A–Z</option>
           </select>
         </div>
         {error ? (
